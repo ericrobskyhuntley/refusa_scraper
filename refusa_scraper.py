@@ -1,6 +1,7 @@
 from lxml.html import fromstring
 import requests
 import json
+from time import sleep
 
 # Based on the article "How to Scrape an AJAX Website using Python" by Julio Alejandro
 # https://www.codementor.io/codementorteam/how-to-scrape-an-ajax-website-using-python-qw8fuitvi
@@ -42,12 +43,13 @@ class ReferenceUSAScraper:
             self.scraped_biz.append(biz_info)
 
 
-    def run(self):
-        for page in range(5):
+    def run(self, pages):
+        for page in range(pages):
             data = self.get_biz_info(page)
             self.parse_biz(data)
             print(f'scraped page {page}')
-
+            # Haven't tested rate limits... may be prudent to add a delay between requests.
+            # sleep(5)
         self.save_data()
 
     def save_data(self):
@@ -57,4 +59,4 @@ class ReferenceUSAScraper:
 
 if __name__ == '__main__':
     scraper = ReferenceUSAScraper()
-    scraper.run()
+    scraper.run(5)
